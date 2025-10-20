@@ -13,14 +13,18 @@
             <li>
                 <a href="{{ url_for('index') }}">主页</a>
             </li>
+            <li>
+                <a href="{{ url_for('problem', pid='list') }}">题目列表</a>
+            </li>
         </ul>
     </nav>
     <div class="content">
         <h2> 欢迎来到 Pralater OJ </h2>
         {% block content %} {% endblock %}
-        <div class="footer">
-            Powerd by <a href="https://github.com/opzc35/PralaterOJ">Pralater OJ</a>, wrote by <a href="https://github.com/opzc35">opzc35</a>. Copyright 2025-2025
-        </div>
+    </div>
+    <hr>
+    <div class="footer">
+        Powerd by <a href="https://github.com/opzc35/PralaterOJ">Pralater OJ</a>, wrote by <a href="https://github.com/opzc35">opzc35</a>. Copyright 2025-2025
     </div>
 </body>
 </html>
