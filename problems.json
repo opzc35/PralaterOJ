@@ -1,1 +1,32 @@
-{ "P1001": {"name":"A+B Problem", "id":"P1001", "describe": "给你两个整数，请你输出他们的和。", "inputformat": "一行两个整数a和b", "outputformat": "输出他们的和", "samples": [["1 1", "2"], ["2 2", "4"]]}}
+{
+    "P1001": {
+        "name": "A+B Problem",
+        "id": "P1001",
+        "describe": "给你两个整数，请你输出他们的和。",
+        "inputformat": "一行两个整数a和b",
+        "outputformat": "输出他们的和",
+        "samples": [
+            [
+                "1 1",
+                "2"
+            ],
+            [
+                "2 2",
+                "4"
+            ]
+        ]
+    },
+    "P1002": {
+        "name": "Hello World!",
+        "id": "P1002",
+        "describe": "请输出Hello World!",
+        "inputformat": "没有输入的啦",
+        "outputformat": "输出 \"Hello World!\"",
+        "samples": [
+            [
+                "None",
+                "Hello World!"
+            ]
+        ]
+    }
+}
