@@ -3,10 +3,10 @@ import json
 import os
 import sys
 from flask_sqlalchemy import SQLAlchemy
+import click
 
 app = Flask(__name__)
 app.secret_key = 'PralaterOJ-default-secret-key'
-
 WIN = sys.platform.startswith('win')
 if WIN:
     prefix = 'sqlite:///'
@@ -15,6 +15,15 @@ else:
 app.config['SQLALCHEMY_DATABASE_URI'] = prefix + os.path.join(app.root_path, 'data.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+@app.cli.command()
+@click.option('--drop', is_flag=True, help="Create after drop.")
+def initdb(drop):
+    if drop:
+        db.drop_all()
+    db.create_all()
+    click.echo('Initialized database.')
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
