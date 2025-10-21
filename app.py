@@ -1,5 +1,24 @@
 from flask import Flask, render_template, request, flash
 import json
+import os
+import sys
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+app.secret_key = 'PralaterOJ-default-secret-key'
+
+WIN = sys.platform.startswith('win')
+if WIN:
+    prefix = 'sqlite:///'
+else:
+    prefix = 'sqlite:////'
+app.config['SQLALCHEMY_DATABASE_URI'] = prefix + os.path.join(app.root_path, 'data.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20))
 
 try:
     with open('problems.json', 'r', encoding='utf-8') as f:
@@ -7,8 +26,7 @@ try:
 except:
     problems = {}
 
-app = Flask(__name__)
-app.secret_key = 'PralaterOJ-default-secret-key'  # 添加secret_key以支持flash消息
+
 
 @app.route('/')
 def index():
