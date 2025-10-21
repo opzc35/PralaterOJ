@@ -1,3 +1,4 @@
+from click import confirmation_option
 from flask import Flask, render_template, request, flash
 import json
 import os
@@ -17,6 +18,16 @@ app.config['SQLALCHEMY_DATABASE_URI'] = prefix + os.path.join(app.root_path, 'da
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20))
+    poisition = db.Column(db.String(10))
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def validate_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
 @app.cli.command()
 @click.option('--drop', is_flag=True, help="Create after drop.")
 def initdb(drop):
@@ -25,17 +36,22 @@ def initdb(drop):
     db.create_all()
     click.echo('Initialized database.')
 
-
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20))
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def validate_password(self, password):
-        return check_password_hash(self.password_hash, password)
-
+@app.cli.command()
+@click.option('--username', prompt=True, help=u'请输入你要增加的管理员的用户名')
+@click.option('--password', prompt=True, hide_input=True, confirmation_prompt=True, help=u'请输入管理员密码')
+def admin(username, password):
+    db.create_all()
+    user = User.query.first()
+    if user is not None:
+        user.name = username
+        user.set_password(password)
+    else:
+        click.echo(u"没有找到用户，开始重新创建")
+        user = User(name=username, poisition='admin')
+        user.set_password(password)
+        db.session.add(user)
+    db.session.commit()
+    click.echo(u"Done.")
 try:
     with open('problems.json', 'r', encoding='utf-8') as f:
         problems = json.load(f)

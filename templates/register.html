@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block pagename %} 注册 {% endblock %}
+{% block content %}
+<h2>注册</h2>
+<form method="POST">
+    <lable for="name">请输入用户名</lable>
+    <input type="text" name="name" id="name">
+    <br>
+    <lable for="password">请输入密码</lable>
+    <input type="password" name="password" id="password">
+    <br>
+    <lable for="password">请输入邮箱</lable>
+    <input type="password" name="email" id="email">
+    <input type="submit" name="submit" value="注册">
+</form>
+{% for message in get_flashed_messages() %}
+    <div class="alert">{{message}}</div>
+{% endfor %}
