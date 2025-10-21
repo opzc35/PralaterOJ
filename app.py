@@ -35,7 +35,10 @@ try:
 except:
     problems = {}
 
-
+@app.context_processor
+def inject_user():
+    user = User.query.first()
+    return dict(user=user)
 
 @app.route('/')
 def index():
