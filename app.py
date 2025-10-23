@@ -6,7 +6,9 @@ import sys
 from flask_sqlalchemy import SQLAlchemy
 import click
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager
 
+#前置
 app = Flask(__name__)
 app.secret_key = 'PralaterOJ-default-secret-key'
 WIN = sys.platform.startswith('win')
@@ -58,6 +60,16 @@ try:
 except:
     problems = {}
 
+loginmanager = LoginManager(app)
+
+# 账号处理
+
+@loginmanager.user_loader
+def load_user(user_id):
+    user = User.query.get(int(user_id))
+    return user
+
+# Web
 @app.context_processor
 def inject_user():
     user = User.query.first()
@@ -100,6 +112,20 @@ def newproblem():
         flash("problem added successfully")
         return render_template('newproblem.html')
     return render_template('newproblem.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['name']
+        password = request.form['password']
+        email = request.form['email']
+        user = User(name=username, poisition='normal')
+        db.session.add(user)
+        db.session.commit()
+        flash(u"注册成功")
+        return render_template('register.html')
+    return render_template('register.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
